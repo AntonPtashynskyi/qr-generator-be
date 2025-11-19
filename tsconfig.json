@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "strict": true,
+        "outDir": "dist",
+        "typeRoots": []
+    },
+    "include": ["src", "types"],
+    "exclude": ["node_modules"]
+}
