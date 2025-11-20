@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 import helmet from 'helmet';
 
 import qrRouter from './qr-codes/qrcodes.router';
+import userRouter from './users/users.router';
 
 const { PORT } = process.env;
 
@@ -22,6 +23,7 @@ app.use("/", async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send("Hello");
 })
 
+app.use(userRouter)
 app.use(qrRouter);
 
 const init = async () => {
