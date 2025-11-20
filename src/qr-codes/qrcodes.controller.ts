@@ -9,8 +9,7 @@ export const createQRCode = async (
 ) => {
   try {
     const { target_url } = req.body;
-    // const ownerID = res.locals.user.id; // Will be added in middleware
-    const ownerID = "111222333"; // Test ID
+    const ownerID = res.locals.user.id;
 
     if (!target_url) {
       return res.status(400).json({ error: "Please attached the link!" });
@@ -37,9 +36,12 @@ export const getQRCode = async (
 ) => {
   const qrId = req.params.qr_id;
 
+  console.log("QR PARAMS", qrId);
+  
+
   try {
     const qrRecord = await QRCodeModel.findOneAndUpdate(
-      { qu_id: qrId },
+      { qr_id: qrId },
       { $inc: { scan_count: 1 } },
       { new: true }
     );

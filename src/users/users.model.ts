@@ -76,11 +76,11 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// userSchema.methods.generateAccessToken = function () {
-//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET as string, {
-//     expiresIn: "15min",
-//   });
-// };
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET as string, {
+    expiresIn: "15min",
+  });
+};
 
 // userSchema.methods.generateRefreshToken = function () {
 //   return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_SECRET as string, {

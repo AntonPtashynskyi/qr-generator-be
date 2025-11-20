@@ -43,7 +43,7 @@ export const tokenService = {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: true,
-      maxAge: 20 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === "production",
     });
   },
@@ -52,7 +52,7 @@ export const tokenService = {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 20 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === "production",
     });
 

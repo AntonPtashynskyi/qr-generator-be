@@ -20,18 +20,19 @@ export const generateQRCode = async (ownerID: string, target_url: string) => {
     const redirectUrl = `${BASE_URL}/r/${uniqQRID}`;
     // Generate QR code image
     return await generateQrCodeDataUrl(redirectUrl);
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error during creation new QR Code:", error);
+    throw new Error("QR Code Can not create ");
+  }
 };
 
 const generateQrCodeDataUrl = async (redirectUrl: string) => {
   try {
-    const dataUrl = await QRCode.toDataURL(redirectUrl, {
+    return await QRCode.toDataURL(redirectUrl, {
       errorCorrectionLevel: "H",
     });
-
-    return dataUrl;
   } catch (error) {
     console.error("Generate QR code Error:", error);
-    throw new Error("Can not create QR Code");
+    throw new Error("QR Code Can not be generated");
   }
 };

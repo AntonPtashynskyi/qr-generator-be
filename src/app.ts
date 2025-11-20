@@ -5,8 +5,9 @@ import helmet from 'helmet';
 
 import qrRouter from './qr-codes/qrcodes.router';
 import userRouter from './users/users.router';
+import mongoose from 'mongoose';
 
-const { PORT } = process.env;
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 
@@ -19,15 +20,15 @@ app.use(helmet({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send("Hello");
-})
-
 app.use(userRouter)
 app.use(qrRouter);
 
 const init = async () => {
   try {
+
+    await mongoose.connect(MONGO_URL as string);
+    console.log("Connected to DB");
+    
     app.listen(PORT, () => {
       console.log("Server Listen PORT:", PORT);
     });

@@ -15,6 +15,7 @@ export const createUser = async (
 
   try {
     const newUser = await userModel.create(user);
+    //TODO USE tokenService.generaTeAccessToken() instead
     const token = newUser.generateAccessToken();
     // set Cookies
     res
