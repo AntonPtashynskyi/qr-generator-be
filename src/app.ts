@@ -3,6 +3,8 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from 'helmet';
 
+import qrRouter from './qr-codes/qrcodes.router';
+
 const { PORT } = process.env;
 
 const app = express();
@@ -19,6 +21,8 @@ app.use(cookieParser());
 app.use("/", async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send("Hello");
 })
+
+app.use(qrRouter);
 
 const init = async () => {
   try {
