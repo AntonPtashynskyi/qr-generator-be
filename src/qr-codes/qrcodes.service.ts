@@ -19,7 +19,8 @@ export const generateQRCode = async (ownerID: string, target_url: string) => {
     // Create redirectURL
     const redirectUrl = `${BASE_URL}/r/${uniqQRID}`;
     // Generate QR code image
-    return await generateQrCodeDataUrl(redirectUrl);
+    return {redirectUrl, qr_id: uniqQRID};
+    // return await generateQrCodeDataUrl(redirectUrl);
   } catch (error) {
     console.error("Error during creation new QR Code:", error);
     throw new Error("QR Code Can not create ");

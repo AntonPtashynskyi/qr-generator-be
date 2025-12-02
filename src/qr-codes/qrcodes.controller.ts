@@ -15,11 +15,47 @@ export const createQRCode = async (
       return res.status(400).json({ error: "Please attached the link!" });
     }
 
-    const dataUrl = await generateQRCode(ownerID, target_url);
+    const {redirectUrl, qr_id} = await generateQRCode(ownerID, target_url);
 
     res.json({
       success: true,
-      qr_code_data_url: dataUrl,
+      qr_code_redirect_url: redirectUrl,
+      id: qr_id
+    });
+  } catch (error) {
+    // next(error);
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+};
+
+export const getAllUsersCodes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const ownerID = res.locals.user.id;
+
+    if (!ownerID) {
+      return res.status(400).json({ error: "User have no access writes" });
+    }
+
+    const codes = await QRCodeModel.find({owner: ownerID});
+
+    const codesTransform = codes.map((code) => {
+      return {
+        id: code.qr_id,
+        targetUrl: code.target_url,
+        scanCount: code.scan_count,
+        date: code.created_at,
+      };
+    });
+
+    res.json({
+      success: true,
+      codes: codesTransform,
     });
   } catch (error) {
     // next(error);
@@ -35,9 +71,7 @@ export const getQRCode = async (
   next: NextFunction
 ) => {
   const qrId = req.params.qr_id;
-
   console.log("QR PARAMS", qrId);
-  
 
   try {
     const qrRecord = await QRCodeModel.findOneAndUpdate(
@@ -51,6 +85,29 @@ export const getQRCode = async (
     } else {
       res.status(404).send("QR-Code can't be find");
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteQRCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const qrId = req.params.qr_id;
+
+    const qrRecord = await QRCodeModel.findOneAndDelete({ qr_id: qrId });
+
+    if (!qrRecord) {
+      return res.status(404).json({ error: "QR-Code can't be find" });
+    }
+
+    res.json({
+      success: true,
+      message: "QR-Code deleted successfully",
+    });
   } catch (error) {
     next(error);
   }

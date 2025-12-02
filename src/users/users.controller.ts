@@ -18,6 +18,13 @@ export const createUser = async (
     //TODO USE tokenService.generaTeAccessToken() instead
     const token = newUser.generateAccessToken();
     // set Cookies
+
+    const { accessToken, refreshToken } = tokenService.generateTokens({
+      id: newUser._id.toString(),
+    });
+
+    tokenService.setAuthCookies(res, accessToken, refreshToken);
+
     res
       .status(201)
       .cookie("accessToken", token, {
@@ -26,6 +33,7 @@ export const createUser = async (
         secure: process.env.NODE_ENV === "production",
       })
       .send({ id: newUser._id });
+
   } catch (error) {
     if (error instanceof MongooseError.ValidationError) {
       const errorMapped = errorTransform(error);
