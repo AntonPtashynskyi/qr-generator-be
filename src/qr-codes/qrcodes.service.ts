@@ -2,7 +2,11 @@ import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
 import QRCodeModel from "./qrcodes.model";
 
-const { BASE_URL} = process.env;
+const { NODE_ENV, DEV_BASE_URL, PROD_BASE_URL } = process.env;
+
+// Determine environment-specific BASE_URL
+const isDevelopment = NODE_ENV === 'development';
+const BASE_URL = isDevelopment ? DEV_BASE_URL : PROD_BASE_URL;
 
 export const generateQRCode = async (ownerID: string, target_url: string) => {
   // Generate uniq QR_id;
