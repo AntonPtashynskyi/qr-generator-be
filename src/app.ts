@@ -7,10 +7,13 @@ import helmet from 'helmet';
 import qrRouter from './qr-codes/qrcodes.router';
 import userRouter from './users/users.router';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const {
   PORT,
-  MONGO_URL,
+  MONGO_URI,
   NODE_ENV,
   DEV_FRONTEND_URL,
   PROD_FRONTEND_URL
@@ -45,7 +48,7 @@ app.use(qrRouter);
 const init = async () => {
   try {
 
-    await mongoose.connect(MONGO_URL as string);
+    await mongoose.connect(MONGO_URI as string);
     console.log("Connected to DB");
     
     app.listen(PORT, () => {
