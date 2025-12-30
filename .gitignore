@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
+# Ignore all .env files
 .env*
+# But allow example files (these are safe to commit)
+!.env*.example
+# Allow .env.local (for local development without Docker)
+# Note: .env.local should still be in .gitignore as it may contain real values
 
 # vercel
 .vercel

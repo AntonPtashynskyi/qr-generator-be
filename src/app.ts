@@ -1,6 +1,5 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from 'helmet';
 
