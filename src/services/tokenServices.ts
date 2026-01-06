@@ -49,23 +49,33 @@ export const tokenService = {
   },
 
   setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
-    res.cookie("accessToken", accessToken, {
+    const cookieOptions = {
       httpOnly: true,
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
       secure: process.env.NODE_ENV === "production",
+      path: "/",
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "lax",
+      ...cookieOptions,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
     });
   },
 
   clearAuthCookies(res: Response) {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    const cookieOptions = {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    };
+
+    res.clearCookie("accessToken", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
   },
 };

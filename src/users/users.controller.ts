@@ -3,7 +3,6 @@ import { Error as MongooseError } from "mongoose";
 import userModel from "./users.model";
 import { errorTransform } from "../helpers/error-transform";
 import { BadRequestError } from "../errors/bad-request";
-import { ONE_HOUR } from "../constants";
 import { tokenService } from "../services/tokenServices";
 
 export const createUser = async (
@@ -15,9 +14,6 @@ export const createUser = async (
 
   try {
     const newUser = await userModel.create(user);
-    //TODO USE tokenService.generaTeAccessToken() instead
-    const token = newUser.generateAccessToken();
-    // set Cookies
 
     const { accessToken, refreshToken } = tokenService.generateTokens({
       id: newUser._id.toString(),
@@ -25,14 +21,11 @@ export const createUser = async (
 
     tokenService.setAuthCookies(res, accessToken, refreshToken);
 
-    res
-      .status(201)
-      .cookie("accessToken", token, {
-        maxAge: ONE_HOUR,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-      })
-      .send({ id: newUser._id });
+    res.status(201).json({
+      id: newUser._id,
+      accessToken,
+      refreshToken
+    });
 
   } catch (error) {
     if (error instanceof MongooseError.ValidationError) {
@@ -63,7 +56,12 @@ export const logIn = async (
     });
 
     tokenService.setAuthCookies(res, accessToken, refreshToken);
-    res.status(200).json({ id: user._id, message: "Login successful" });
+    res.status(200).json({
+      id: user._id,
+      message: "Login successful",
+      accessToken,
+      refreshToken
+    });
   } catch (error) {
     next(error);
   }
