@@ -49,10 +49,14 @@ export const tokenService = {
   },
 
   setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+    // For HTTP connections, we need sameSite: "lax" without secure flag
+    // For HTTPS connections, we can use sameSite: "none" with secure flag
+    const isHttps = process.env.USE_HTTPS === 'true';
+
     const cookieOptions = {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isHttps ? "none" as const : "lax" as const,
+      secure: isHttps,
       path: "/",
     };
 
@@ -68,10 +72,12 @@ export const tokenService = {
   },
 
   clearAuthCookies(res: Response) {
+    const isHttps = process.env.USE_HTTPS === 'true';
+
     const cookieOptions = {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isHttps ? "none" as const : "lax" as const,
+      secure: isHttps,
       path: "/",
     };
 
