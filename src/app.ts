@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from "express";
@@ -6,9 +10,6 @@ import helmet from 'helmet';
 import qrRouter from './qr-codes/qrcodes.router';
 import userRouter from './users/users.router';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const {
   PORT,

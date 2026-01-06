@@ -16,7 +16,10 @@ exports.generateQRCode = void 0;
 const uuid_1 = require("uuid");
 const qrcode_1 = __importDefault(require("qrcode"));
 const qrcodes_model_1 = __importDefault(require("./qrcodes.model"));
-const { BASE_URL } = process.env;
+const { NODE_ENV, DEV_BASE_URL, PROD_BASE_URL } = process.env;
+// Determine environment-specific BASE_URL
+const isDevelopment = NODE_ENV === 'development';
+const BASE_URL = isDevelopment ? DEV_BASE_URL : PROD_BASE_URL;
 const generateQRCode = (ownerID, target_url) => __awaiter(void 0, void 0, void 0, function* () {
     // Generate uniq QR_id;
     const uniqQRID = (0, uuid_1.v4)();
